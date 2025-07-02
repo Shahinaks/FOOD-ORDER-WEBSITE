@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Node dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+
+# Editor configs
+.vscode/
+.idea/
+
+# Environment files (both frontend and backend)
+.env
+client/.env
+server/.env
+
+# Firebase sensitive files
+firebase.js
+firebaseauth.js
+firebaseadmin.js
+firebaseadminsdk.json
+setadmin.js

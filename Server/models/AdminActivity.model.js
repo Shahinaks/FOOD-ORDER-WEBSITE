@@ -10,11 +10,9 @@ const adminActivitySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  targetType: {
-    type: String 
-  },
-  targetId: {
-    type: mongoose.Schema.Types.ObjectId
+  description: {
+    type: String,
+    required: true
   },
   timestamp: {
     type: Date,

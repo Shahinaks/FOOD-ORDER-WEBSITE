@@ -1,36 +1,79 @@
 import dotenv from 'dotenv';
 dotenv.config(); 
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
+import menuRoutes from './routes/menuItem.routes.js';
+import cartRoutes from './routes/cart.routes.js';
+import orderRoutes from './routes/order.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
 import adminActivityRoutes from './routes/adminActivity.routes.js';
+import couponRoutes from './routes/coupon.routes.js';
+import reviewRoutes from './routes/review.routes.js';
+import restaurantRoutes from './routes/restaurant.routes.js';
+import categoryRoutes from './routes/category.routes.js';
+import deliveryRoutes from './routes/delivery.routes.js';
+import wishlistRoutes from './routes/wishlist.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+import paymentIntentRoutes from './routes/paymentIntent.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
 
-
-
-dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-
+app.use('/api/menu', menuRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/payments', paymentRoutes);
 app.use('/api/admin-activity', adminActivityRoutes);
-
+app.use('/api/coupons', couponRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/restaurants', restaurantRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/deliveries', deliveryRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api', paymentIntentRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 const PORT = process.env.PORT || 5000;
-mongoose
-  .connect(process.env.MONGO_URI)
+
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('MongoDB connected');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    console.log('✅ MongoDB connected');
+
+    const buildPath = path.join(__dirname, 'build');
+    if (fs.existsSync(buildPath)) {
+      app.use(express.static(buildPath));
+      app.get('*', (req, res) => {
+        res.sendFile(path.resolve(buildPath, 'index.html'));
+      });
+    } else {
+      console.warn('⚠️ Build folder not found. Skipping frontend serving.');
+    }
+
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
-  .catch((err) => console.error('DB connection error:', err));
+  .catch((err) => console.error('❌ DB connection error:', err));
