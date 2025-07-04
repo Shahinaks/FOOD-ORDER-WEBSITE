@@ -1,22 +1,21 @@
 import express from 'express';
 import {
   createNotification,
-  getUserNotifications,
-  markAsRead,
   deleteNotification,
+  getAllNotifications,
 } from '../controllers/notification.controller.js';
-import { verifyFirebaseToken } from '../middleware/auth.middleware.js'; 
+
+import { verifyFirebaseToken, isAdmin } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-router.use(verifyFirebaseToken);
+// 📋 GET all notifications (accessible to all authenticated users)
+router.get('/', verifyFirebaseToken, getAllNotifications);
 
-router.post('/', createNotification);
+// 🔔 POST create a new notification (admin only)
+router.post('/', verifyFirebaseToken, isAdmin, createNotification);
 
-router.get('/', getUserNotifications);
-
-router.put('/:id/read', markAsRead);
-
-router.delete('/:id', deleteNotification);
+// 🗑 DELETE a notification (admin only)
+router.delete('/:id', verifyFirebaseToken, isAdmin, deleteNotification);
 
 export default router;

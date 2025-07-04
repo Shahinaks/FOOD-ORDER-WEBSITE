@@ -57,7 +57,7 @@ const AppNavbar = ({ onProfileClick }) => {
           </Nav>
 
           <Nav className="align-items-center gap-3">
-            {!currentUser ? (
+            {!currentUser || location.pathname === "/" ? (
               <>
                 <Button variant="outline-light" size="sm" as={Link} to="/login">
                   Login
@@ -96,6 +96,7 @@ const AppNavbar = ({ onProfileClick }) => {
               </Dropdown>
             )}
           </Nav>
+
         </Navbar.Collapse>
       </Container>
     </Navbar>

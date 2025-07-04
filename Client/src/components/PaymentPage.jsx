@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
+const API = import.meta.env.VITE_API_URL;
+
 
 const stripePromise = loadStripe('pk_test_YourPublishableKeyHere');
 

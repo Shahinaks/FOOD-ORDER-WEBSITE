@@ -9,6 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { toast } from 'react-toastify';
+const API = import.meta.env.VITE_API_URL;
 
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f7f'];
 
@@ -58,12 +59,13 @@ const AdminDashboardPage = () => {
         <Col md={2} className="bg-light min-vh-100 d-flex flex-column p-3 border-end">
           <Nav className="flex-column gap-3">
             <Nav.Link as={Link} to="/admin/overview">📊 Dashboard Overview</Nav.Link>
-            <Nav.Link as={Link} to="/admin/orders">📦 Manage Orders</Nav.Link>
-            <Nav.Link as={Link} to="/admin/menu">🍔 Manage Menu</Nav.Link>
+            <Nav.Link as={Link} to="/admin/orders">📦  Orders</Nav.Link>
+            <Nav.Link as={Link} to="/admin/menu">🍔  Menu</Nav.Link>
             <Nav.Link as={Link} to="/admin/reviews">📝 Moderate Reviews</Nav.Link>
-            <Nav.Link as={Link} to="/admin/coupons">🏷️ Manage Coupons</Nav.Link>
+            <Nav.Link as={Link} to="/admin/coupons">🏷️  Coupons</Nav.Link>
             <Nav.Link as={Link} to="/admin/payments">💳 Payments</Nav.Link>
             <Nav.Link as={Link} to="/admin/activity">📋 Activity Logs</Nav.Link>
+            <Nav.Link as={Link} to="/admin/notifications">🔔  Notifications</Nav.Link>
             <Nav.Link onClick={handleLogout} className="text-danger">🚪 Logout</Nav.Link>
 
           </Nav>

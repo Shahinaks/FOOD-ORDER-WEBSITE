@@ -10,6 +10,7 @@ import { auth, googleProvider } from '../firebase';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import loginBoardImage from '../assets/login-tablet-bg.png';
 
+const API = import.meta.env.VITE_API_URL;
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -39,16 +40,12 @@ const LoginPage = () => {
       const token = await user.getIdToken();
       localStorage.setItem('firebase_token', token);
 
-      const res = await fetch('http://localhost:5000/api/users/check', {
+      const res = await fetch(`${API}/api/users/check`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error('Failed to fetch user role');
-
       const data = await res.json();
-
-      console.log('Role:', data.user.role);
-
 
       if (data.user.role === 'admin') {
         navigate('/admin/overview');
@@ -56,12 +53,12 @@ const LoginPage = () => {
         navigate('/menu');
       }
     } catch (err) {
+      console.error(err);
       setError('Invalid email or password');
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleGoogleLogin = async () => {
     try {
@@ -70,12 +67,11 @@ const LoginPage = () => {
       const token = await user.getIdToken();
       localStorage.setItem('firebase_token', token);
 
-      const res = await fetch('http://localhost:5000/api/users/check', {
+      const res = await fetch(`${API}/api/users/check`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error('Failed to fetch user role');
-
       const data = await res.json();
 
       if (data.user.role === 'admin') {
@@ -84,10 +80,10 @@ const LoginPage = () => {
         navigate('/menu');
       }
     } catch (err) {
+      console.error(err);
       setError('Google login failed');
     }
   };
-
 
   const handleResetPassword = async () => {
     if (!form.email) return setError('Enter your email to reset password');
@@ -102,7 +98,7 @@ const LoginPage = () => {
   const formBoxStyle = {
     ...styles.formBox,
     ...(isMobile ? styles.formBoxMobile : {
-      width: '58%', 
+      width: '58%',
       textAlign: 'center',
     }),
   };
@@ -114,7 +110,6 @@ const LoginPage = () => {
       textAlign: 'center',
     }),
   };
-
 
   return (
     <div style={styles.container}>

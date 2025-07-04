@@ -1,71 +1,74 @@
 import Notification from '../models/Notification.model.js';
+import { io } from '../socket.js';
 
+// 🔔 Create notification (admin only)
 export const createNotification = async (req, res) => {
   try {
-    const { recipient, title, message, type } = req.body;
+    const { title, message, type = 'info' } = req.body;
 
-    if (!recipient || !title || !message) {
-      return res.status(400).json({ message: 'Missing required fields' });
+    if (!title || !message) {
+      return res.status(400).json({ message: 'Title and message are required' });
     }
 
     const notification = await Notification.create({
-      user: recipient,
       title,
       message,
       type,
+      createdBy: req.user._id,
     });
 
-    res.status(201).json(notification);
-  } catch (err) {
-    console.error('❌ Failed to create notification:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+    // Emit real-time notification
+    io.emit('notification', notification);
 
-export const getUserNotifications = async (req, res) => {
-  try {
-    const notifications = await Notification.find({ user: req.user._id }).sort({ createdAt: -1 });
-    res.json(notifications);
-  } catch (err) {
-    console.error('❌ Failed to fetch notifications:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-export const markAsRead = async (req, res) => {
-  try {
-    const notification = await Notification.findOne({
-      _id: req.params.id,
-      user: req.user._id,
+    res.status(201).json({
+      message: 'Notification created successfully',
+      notification,
     });
-
-    if (!notification) {
-      return res.status(404).json({ message: 'Notification not found' });
-    }
-
-    notification.read = true;
-    await notification.save();
-    res.json({ message: 'Marked as read', notification });
   } catch (err) {
-    console.error('❌ Failed to mark as read:', err.message);
-    res.status(500).json({ message: 'Server error' });
+    console.error('❌ Create Notification Error:', err);
+    res.status(500).json({
+      message: 'Failed to create notification',
+      error: err.message,
+    });
   }
 };
 
+// 🗑 Delete notification (admin only)
 export const deleteNotification = async (req, res) => {
   try {
-    const deleted = await Notification.findOneAndDelete({
-      _id: req.params.id,
-      user: req.user._id,
-    });
+    const { id } = req.params;
+    const deleted = await Notification.findByIdAndDelete(id);
 
     if (!deleted) {
       return res.status(404).json({ message: 'Notification not found' });
     }
 
-    res.json({ message: 'Notification deleted' });
+    res.json({ message: 'Notification deleted successfully' });
   } catch (err) {
-    console.error('❌ Failed to delete notification:', err.message);
-    res.status(500).json({ message: 'Server error' });
+    console.error('❌ Delete Notification Error:', err);
+    res.status(500).json({
+      message: 'Failed to delete notification',
+      error: err.message,
+    });
+  }
+};
+
+// 📋 Get all notifications (any user)
+export const getAllNotifications = async (req, res) => {
+  try {
+    const { type } = req.query;
+    const filter = type ? { type } : {};
+
+    const notifications = await Notification.find(filter)
+      .sort({ createdAt: -1 })
+      .populate('createdBy', 'name email role');
+
+    res.json(notifications);
+  } catch (err) {
+    console.error('❌ Fetch Notifications Error:', err);
+    res.status(500).json({
+      message: 'Failed to fetch notifications',
+      error: err.message,
+    });
   }
 };

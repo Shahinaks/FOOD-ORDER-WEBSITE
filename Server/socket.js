@@ -1,33 +1,39 @@
-let io;
+// backend/socket.js
+import { Server } from 'socket.io';
 
+let ioInstance;
 
-  export const initSocket = async (server) => {
-  const { Server } = await import('socket.io');
-
-  io = new Server(server, {
+export const initSocket = (server) => {
+  ioInstance = new Server(server, {
     cors: {
-      origin: 'http://localhost:5173',
+      origin: 'http://localhost:5173', // update if your frontend is hosted elsewhere
       credentials: true,
     },
   });
 
-  io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
+  ioInstance.on('connection', (socket) => {
+    console.log('🟢 New client connected:', socket.id);
 
-    socket.on('joinOrderRoom', (orderId) => {
-      socket.join(orderId);
+    // Register user to their Firebase UID room
+    socket.on('register', (uid) => {
+      socket.join(uid);
+      console.log(`📥 User with UID ${uid} joined room`);
     });
 
-    socket.on('leaveOrderRoom', (orderId) => {
-      socket.leave(orderId);
+    socket.on('disconnect', () => {
+      console.log('🔴 Client disconnected:', socket.id);
     });
   });
 
-  return io;
+  return ioInstance;
 };
 
-export const emitOrderStatusUpdate = (orderId, newStatus) => {
-  if (io) {
-    io.to(orderId).emit('orderStatusUpdated', { orderId, newStatus });
+// Export getIO as `io` to make usage easy in controllers
+export const getIO = () => {
+  if (!ioInstance) {
+    throw new Error('❌ Socket.io not initialized. Call initSocket(server) first.');
   }
+  return ioInstance;
 };
+
+export { getIO as io };

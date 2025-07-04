@@ -11,6 +11,8 @@ import {
 import { SiGooglepay } from 'react-icons/si';
 import { motion } from 'framer-motion';
 import axios from '../api/axiosInstance';
+const API = import.meta.env.VITE_API_URL;
+
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();

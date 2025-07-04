@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../api/axiosInstance';
 import { Table, Container, Spinner, Alert } from 'react-bootstrap';
+const API = import.meta.env.VITE_API_URL;
 
 const MyPaymentsPage = () => {
   const [payments, setPayments] = useState([]);

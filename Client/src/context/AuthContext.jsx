@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
+import { socket } from '../Socket'; // ✅ Import your client socket
 
 const AuthContext = createContext();
 
@@ -13,9 +14,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setAuthLoading(true);
+
       if (firebaseUser) {
         try {
           const token = await firebaseUser.getIdToken();
+
           setCurrentUser(firebaseUser);
           setFirebaseToken(token);
           localStorage.setItem('firebaseToken', token);
@@ -31,6 +34,9 @@ export const AuthProvider = ({ children }) => {
             setRole('user');
           }
 
+          // ✅ Register this user to their personal socket room
+          socket.emit('register', firebaseUser.uid);
+
         } catch (error) {
           console.error('Auth context error:', error);
           setCurrentUser(null);
@@ -44,6 +50,7 @@ export const AuthProvider = ({ children }) => {
         setRole('user');
         localStorage.removeItem('firebaseToken');
       }
+
       setAuthLoading(false);
     });
 

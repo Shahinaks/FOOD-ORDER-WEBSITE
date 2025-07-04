@@ -13,6 +13,8 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import QRCode from 'react-qr-code';
 import { getAuth } from 'firebase/auth';
 import 'leaflet/dist/leaflet.css';
+const API = import.meta.env.VITE_API_URL;
+
 
 const OrderDetailsPage = () => {
   const { orderId } = useParams();

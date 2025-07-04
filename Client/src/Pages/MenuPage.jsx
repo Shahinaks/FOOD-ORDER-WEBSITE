@@ -17,6 +17,7 @@ import {
   FaBlender, FaFireAlt, FaDrumstickBite, FaFish, FaUtensils, FaBreadSlice,
   FaStar, FaConciergeBell, FaCoffee, FaEgg
 } from 'react-icons/fa';
+const API = import.meta.env.VITE_API_URL;
 
 const colors = {
   bg: '#f4f1ee',

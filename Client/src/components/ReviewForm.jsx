@@ -4,6 +4,8 @@ import { FaStar } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import axios from '../api/axiosInstance';
 import { toast } from 'react-toastify';
+const API = import.meta.env.VITE_API_URL;
+
 
 const ReviewForm = ({ menuItemId, onSubmitted }) => {
   const [rating, setRating] = useState(0);

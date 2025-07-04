@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from '../api/axiosInstance';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
+const API = import.meta.env.VITE_API_URL;
 
 const WishlistContext = createContext();
 

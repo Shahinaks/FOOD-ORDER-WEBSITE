@@ -1,0 +1,17 @@
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { socket } from '../Socket';
+
+const useNotificationListener = () => {
+  useEffect(() => {
+    socket.on('notification', (note) => {
+      toast.info(`${note.title}: ${note.message}`);
+    });
+
+    return () => {
+      socket.off('notification');
+    };
+  }, []);
+};
+
+export default useNotificationListener;

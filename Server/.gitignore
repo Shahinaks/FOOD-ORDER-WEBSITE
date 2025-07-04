@@ -22,12 +22,10 @@ dist/
 
 # Environment files (both frontend and backend)
 .env
-client/.env
-server/.env
+Client/.env
+Server/.env
 
 # Firebase sensitive files
 firebase.js
-firebaseauth.js
-firebaseadmin.js
-firebaseadminsdk.json
-setadmin.js
+firebase-adminsdk.json
+

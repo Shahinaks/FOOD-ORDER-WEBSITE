@@ -8,6 +8,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
+const API = import.meta.env.VITE_API_URL;
 
 const MyOrderPage = () => {
   const [orders, setOrders] = useState([]);

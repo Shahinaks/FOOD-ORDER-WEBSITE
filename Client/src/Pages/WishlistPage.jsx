@@ -14,6 +14,8 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+const API = import.meta.env.VITE_API_URL;
+
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);

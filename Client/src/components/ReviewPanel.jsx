@@ -1,13 +1,15 @@
-// components/ReviewPanel.jsx
+
 import React, { useEffect, useState } from 'react';
 import { Card, Spinner, Badge } from 'react-bootstrap';
 import axios from '../api/axiosInstance';
 import { FaStar } from 'react-icons/fa';
+const API = import.meta.env.VITE_API_URL;
+
 
 const ReviewPanel = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     const fetchReviews = async () => {
       try {

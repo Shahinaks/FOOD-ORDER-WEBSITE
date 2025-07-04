@@ -10,6 +10,7 @@ import {
   Alert,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+const API = import.meta.env.VITE_API_URL;
 
 const AdminOrdersPage = () => {
   const [orders, setOrders] = useState([]);

@@ -7,6 +7,8 @@ import axios from '../api/axiosInstance';
 import { toast } from 'react-toastify';
 import StripeCheckoutForm from '../components/StripeCheckoutForm';
 import { useCart } from '../context/CartContext';
+const API = import.meta.env.VITE_API_URL;
+
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);

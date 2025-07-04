@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../api/axiosInstance';
 import { Button, Form, Table, Alert } from 'react-bootstrap';
+const API = import.meta.env.VITE_API_URL;
 
 const AdminCouponPage = () => {
     const [coupons, setCoupons] = useState([]);

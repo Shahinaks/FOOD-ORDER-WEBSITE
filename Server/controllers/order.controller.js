@@ -2,8 +2,8 @@ import Order from '../models/Order.model.js';
 import { MenuItem } from '../models/MenuItem.model.js';
 import Coupon from '../models/Coupon.model.js';
 import { sendOrderConfirmation } from '../utils/sendEmail.js';
+import { getIO } from '../socket.js'; // ✅ socket.io instance
 
-// ✅ Create Order (Checkout) — with optional Coupon and message
 export const placeOrder = async (req, res) => {
   try {
     const {
@@ -19,7 +19,6 @@ export const placeOrder = async (req, res) => {
       return res.status(400).json({ message: 'Order must have at least one item' });
     }
 
-    // Calculate total price
     let totalAmount = 0;
     for (const item of items) {
       const menuItem = await MenuItem.findById(item.menuItem);
@@ -58,6 +57,15 @@ export const placeOrder = async (req, res) => {
 
     const savedOrder = await newOrder.save();
     await sendOrderConfirmation(req.user.email, savedOrder._id);
+
+    // ✅ Emit notification to this user using their Firebase UID
+    const io = getIO();
+    if (req.user.uid) {
+      io.to(req.user.uid).emit('notification', {
+        title: 'Order Placed',
+        message: `✅ Order ${shortId} has been placed successfully! 🎉`,
+      });
+    }
 
     res.status(201).json(savedOrder);
   } catch (err) {
@@ -161,8 +169,6 @@ export const cancelOrder = async (req, res) => {
     res.status(500).json({ message: 'Failed to cancel order', error: err.message });
   }
 };
-
-
 
 export const filterOrdersByStatus = async (req, res) => {
   try {

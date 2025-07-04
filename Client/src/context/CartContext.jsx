@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from '../api/axiosInstance';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
+const API = import.meta.env.VITE_API_URL;
 
 const CartContext = createContext();
 

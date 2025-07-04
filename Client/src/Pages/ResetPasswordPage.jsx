@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from '../api/axiosInstance';
 import { Form, Button, Alert, Container, Spinner } from 'react-bootstrap';
+const API = import.meta.env.VITE_API_URL;
+
 
 const ResetPasswordPage = () => {
   const [params] = useSearchParams();

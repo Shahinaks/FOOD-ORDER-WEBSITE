@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from '../api/axiosInstance';
 import { Table, Container, Spinner, Alert } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
+const API = import.meta.env.VITE_API_URL;
 
 const AdminPaymentsPage = () => {
   const { firebaseToken } = useAuth();

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from '../api/axiosInstance';
 import { Container, Table, Spinner, Alert } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+const API = import.meta.env.VITE_API_URL;
 
 const AdminActivityPage = () => {
   const [logs, setLogs] = useState([]);

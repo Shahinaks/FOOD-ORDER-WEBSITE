@@ -9,6 +9,7 @@ import {
   Form,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+const API = import.meta.env.VITE_API_URL;
 
 const AdminReviewModerationPage = () => {
   const [reviews, setReviews] = useState([]);

@@ -24,14 +24,20 @@ import AdminMenuPage from './Pages/AdminMenuPage';
 import AdminReviewModerationPage from './Pages/AdminReviewModerationPage';
 import AdminCouponPage from './Pages/AdminCouponPage';
 import AdminPaymentsPage from './Pages/AdminPaymentsPage';
+import AdminNotificationPage from './Pages/AdminNotificationPage';
+
+
+import useNotificationListener from './hooks/useNotificationListener'; // ✅ Correct import
 
 const AppRoutes = () => {
   const location = useLocation();
   const [showProfile, setShowProfile] = useState(false);
 
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const hideNavbarRoutes = ['/signup', '/login', '/menu','/checkout'];
+  const hideNavbarRoutes = ['/signup', '/login', '/menu', '/checkout'];
   const hideMainNavbar = isAdminRoute || hideNavbarRoutes.includes(location.pathname);
+
+  useNotificationListener(); // ✅ Call the hook here directly
 
   return (
     <>
@@ -61,6 +67,8 @@ const AppRoutes = () => {
         <Route path="/admin/reviews" element={<AdminReviewModerationPage />} />
         <Route path="/admin/coupons" element={<AdminCouponPage />} />
         <Route path="/admin/payments" element={<AdminPaymentsPage />} />
+        <Route path="/admin/notifications" element={<AdminNotificationPage />} />
+
       </Routes>
 
       <ProfileModal show={showProfile} handleClose={() => setShowProfile(false)} />

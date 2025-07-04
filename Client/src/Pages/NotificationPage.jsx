@@ -14,12 +14,21 @@ const NotificationPage = () => {
       if (!user) return;
 
       const token = await user.getIdToken();
+
       const { data } = await axios.get('/notifications', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setNotifications(data || []);
+
+      // Ensure we only accept arrays
+      if (Array.isArray(data)) {
+        setNotifications(data);
+      } else {
+        console.warn('Unexpected notification data:', data);
+        setNotifications([]);
+      }
     } catch (err) {
       console.error('Failed to fetch notifications:', err);
+      setNotifications([]);
     } finally {
       setLoading(false);
     }
@@ -37,9 +46,7 @@ const NotificationPage = () => {
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
         </div>
-      ) : notifications.length === 0 ? (
-        <Alert variant="info" className="text-center">No notifications yet.</Alert>
-      ) : (
+      ) : Array.isArray(notifications) && notifications.length > 0 ? (
         notifications.map((note) => (
           <Card
             key={note._id}
@@ -58,6 +65,10 @@ const NotificationPage = () => {
             </Card.Body>
           </Card>
         ))
+      ) : (
+        <Alert variant="info" className="text-center">
+          No notifications yet.
+        </Alert>
       )}
     </Container>
   );

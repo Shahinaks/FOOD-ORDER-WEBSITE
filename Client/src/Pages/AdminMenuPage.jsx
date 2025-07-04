@@ -10,6 +10,8 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
+const API = import.meta.env.VITE_API_URL;
+
 const AdminMenuPage = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -24,6 +26,7 @@ const AdminMenuPage = () => {
     description: '',
     restaurant: '',
     category: '',
+    image: '',
   });
 
   const fetchMenu = async () => {
@@ -42,7 +45,6 @@ const AdminMenuPage = () => {
         });
         return merged;
       });
-
     } catch (err) {
       toast.error('Failed to load menu');
     } finally {
@@ -95,6 +97,7 @@ const AdminMenuPage = () => {
         description: '',
         restaurant: '',
         category: '',
+        image: '',
       });
       setEditItem(null);
     } catch (err) {
@@ -122,6 +125,7 @@ const AdminMenuPage = () => {
         description: item.description,
         restaurant: item.restaurant?._id || item.restaurant || '',
         category: item.category?._id || item.category || '',
+        image: item.image || '',
       });
     } else {
       setEditItem(null);
@@ -131,6 +135,7 @@ const AdminMenuPage = () => {
         description: '',
         restaurant: '',
         category: '',
+        image: '',
       });
     }
     setShowModal(true);
@@ -151,6 +156,7 @@ const AdminMenuPage = () => {
               <th>Price</th>
               <th>Restaurant</th>
               <th>Category</th>
+              <th>Image</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -161,6 +167,15 @@ const AdminMenuPage = () => {
                 <td>₹{item.price}</td>
                 <td>{item.restaurant?.name || item.restaurant}</td>
                 <td>{item.category?.name || item.category}</td>
+                <td>
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      style={{ width: 60, height: 40, objectFit: 'cover' }}
+                    />
+                  )}
+                </td>
                 <td>
                   <Button size="sm" variant="info" onClick={() => openModal(item)}>Edit</Button>{' '}
                   <Button size="sm" variant="danger" onClick={() => handleDelete(item._id)}>Delete</Button>
@@ -190,6 +205,10 @@ const AdminMenuPage = () => {
               <Form.Control as="textarea" name="description" value={formData.description} onChange={handleChange} />
             </Form.Group>
             <Form.Group className="mb-2">
+              <Form.Label>Image URL</Form.Label>
+              <Form.Control name="image" value={formData.image} onChange={handleChange} placeholder="https://example.com/image.jpg" />
+            </Form.Group>
+            <Form.Group className="mb-2">
               <Form.Label>Restaurant</Form.Label>
               <Form.Select name="restaurant" value={formData.restaurant} onChange={handleChange}>
                 <option value="">Select Restaurant</option>
@@ -207,7 +226,7 @@ const AdminMenuPage = () => {
                 ))}
               </Form.Select>
             </Form.Group>
-            <Button onClick={handleSubmit} variant="primary">
+            <Button onClick={handleSubmit} variant="primary" className="mt-3">
               {editItem ? 'Update' : 'Add'}
             </Button>
           </Form>

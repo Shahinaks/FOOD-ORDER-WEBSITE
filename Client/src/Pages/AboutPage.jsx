@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
 import axios from "axios";
+const API = import.meta.env.VITE_API_URL;
 
 const AboutPage = () => {
   const [galleryImages, setGalleryImages] = useState([]);

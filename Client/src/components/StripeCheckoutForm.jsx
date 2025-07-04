@@ -10,6 +10,8 @@ import { Form, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axiosInstance';
 import { toast } from 'react-toastify';
+const API = import.meta.env.VITE_API_URL;
+
 
 const StripeCheckoutForm = ({
   orderId,
