@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import http from 'http'; 
-import { initSocket } from '../Socket.js'; 
+import { initSocket } from './socket.js'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
