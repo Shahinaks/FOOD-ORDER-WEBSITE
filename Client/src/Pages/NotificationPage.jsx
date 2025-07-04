@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Container, Card, Spinner, Alert, Badge } from 'react-bootstrap';
 import axios from '../api/axiosInstance';
 import { getAuth } from 'firebase/auth';
+const API = import.meta.env.VITE_API_URL;
+
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -19,7 +21,6 @@ const NotificationPage = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      // Ensure we only accept arrays
       if (Array.isArray(data)) {
         setNotifications(data);
       } else {

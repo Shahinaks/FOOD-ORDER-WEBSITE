@@ -8,19 +8,17 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import http from 'http'; // For creating server
-import { initSocket } from './socket.js'; // Custom socket module
+import http from 'http'; 
+import { initSocket } from '../Socket.js'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const server = http.createServer(app); // Create server for Socket.IO
+const server = http.createServer(app); 
 
-// Initialize socket.io with server
 initSocket(server);
 
-// Middleware
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
@@ -28,7 +26,6 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-// Import and mount routes
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import menuRoutes from './routes/menuItem.routes.js';
@@ -63,7 +60,6 @@ app.use('/api/admin', adminRoutes);
 app.use('/api', paymentIntentRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// Serve frontend build if exists
 const buildPath = path.join(__dirname, 'build');
 if (fs.existsSync(buildPath)) {
   app.use(express.static(buildPath));
@@ -74,7 +70,6 @@ if (fs.existsSync(buildPath)) {
   console.warn('⚠️ Build folder not found. Skipping frontend serving.');
 }
 
-// Start the server after MongoDB connects
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO_URI)

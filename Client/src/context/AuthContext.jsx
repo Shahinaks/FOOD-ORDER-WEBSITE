@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
-import { socket } from '../Socket'; // ✅ Import your client socket
+import { socket } from '../socket';
+
+
 
 const AuthContext = createContext();
 

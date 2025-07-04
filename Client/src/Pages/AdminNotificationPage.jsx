@@ -16,7 +16,6 @@ const AdminNotificationPage = () => {
         headers: { Authorization: `Bearer ${firebaseToken}` },
       });
 
-      // ✅ Validate the response is an array
       if (Array.isArray(res.data)) {
         setNotifications(res.data);
       } else {

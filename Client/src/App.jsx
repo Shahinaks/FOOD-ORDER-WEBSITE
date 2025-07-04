@@ -27,7 +27,7 @@ import AdminPaymentsPage from './Pages/AdminPaymentsPage';
 import AdminNotificationPage from './Pages/AdminNotificationPage';
 
 
-import useNotificationListener from './hooks/useNotificationListener'; // ✅ Correct import
+import useNotificationListener from './hooks/useNotificationListener'; 
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -37,7 +37,7 @@ const AppRoutes = () => {
   const hideNavbarRoutes = ['/signup', '/login', '/menu', '/checkout'];
   const hideMainNavbar = isAdminRoute || hideNavbarRoutes.includes(location.pathname);
 
-  useNotificationListener(); // ✅ Call the hook here directly
+  useNotificationListener(); 
 
   return (
     <>

@@ -1,7 +1,6 @@
 import Notification from '../models/Notification.model.js';
 import { io } from '../socket.js';
 
-// 🔔 Create notification (admin only)
 export const createNotification = async (req, res) => {
   try {
     const { title, message, type = 'info' } = req.body;
@@ -17,7 +16,6 @@ export const createNotification = async (req, res) => {
       createdBy: req.user._id,
     });
 
-    // Emit real-time notification
     io.emit('notification', notification);
 
     res.status(201).json({
@@ -33,7 +31,6 @@ export const createNotification = async (req, res) => {
   }
 };
 
-// 🗑 Delete notification (admin only)
 export const deleteNotification = async (req, res) => {
   try {
     const { id } = req.params;
@@ -53,7 +50,6 @@ export const deleteNotification = async (req, res) => {
   }
 };
 
-// 📋 Get all notifications (any user)
 export const getAllNotifications = async (req, res) => {
   try {
     const { type } = req.query;
