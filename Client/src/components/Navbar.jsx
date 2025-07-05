@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar, Nav, Container, Button, Dropdown } from "react-bootstrap";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";

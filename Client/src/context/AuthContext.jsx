@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
-import socket from '../src/socket.js';
+import { socket } from '../socket.js';
 
 
 
