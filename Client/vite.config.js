@@ -9,7 +9,8 @@ export default defineConfig({
       preserveEntrySignatures: 'strict'
     }
   },
-  server: {
-    historyApiFallback: true
+  optimizeDeps: {
+    include: ['react-router-dom'],
+    exclude: ['react-router'] // 👈 this prevents Vite from trying to bundle react-router directly
   }
 });
