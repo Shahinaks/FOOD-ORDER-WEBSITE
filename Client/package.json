@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-  "dev": "vite",
-  "build": "npx vite build",
-  "preview": "vite preview"
-},
+    "dev": "vite",
+    "build": "node --no-warnings ./node_modules/vite/dist/node/cli.js build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.4.0",
