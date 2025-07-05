@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, InputGroup, ListGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import axios from "../api/axiosInstance"; // ✅ Make sure this is correct
+import axios from "../api/axiosInstance"; 
 
 const videoList = ["/video/food-bg1.mp4", "/video/food-bg3.mp4", "/video/food-bg2.mp4"];
 const fallbackImage = "/images/hero-fallback.jpg";

@@ -18,22 +18,24 @@ Thumbs.db
 # ------------------------------
 # Node Dependencies
 # ------------------------------
-node_modules/
+Client/node_modules/
+Server/node_modules/
 
 # ------------------------------
 # Build Outputs
 # ------------------------------
-build/
-dist/
-.vite/
-.temp/
-.cache/
+Client/dist/
+Client/.vite/
+Client/.temp/
+Client/.cache/
+Server/build/
+Server/dist/
 
 # ------------------------------
 # Environment and Secrets
 # ------------------------------
 .env
-.env.*         # Covers .env.development, .env.production etc.
+.env.*                 # .env.development, .env.production, etc.
 Client/.env
 Server/.env
 firebase.js
@@ -44,6 +46,4 @@ firebase-adminsdk.json
 # ------------------------------
 *.local
 *.env.local
-npm-debug.log
-yarn-error.log
 coverage/
