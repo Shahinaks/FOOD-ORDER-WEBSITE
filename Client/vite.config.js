@@ -10,12 +10,6 @@ export default defineConfig({
     }
   },
   server: {
-    // Enables fallback to index.html for client-side React Router routes
     historyApiFallback: true
-  },
-  resolve: {
-    alias: {
-      '@': '/src' // Optional: enables '@/components/Navbar' style imports
-    }
   }
 });
