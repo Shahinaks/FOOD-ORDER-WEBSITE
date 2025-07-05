@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { socket } from '../socket';
+import { socket } from '../src/socket.js';
 
 const useNotificationListener = () => {
   useEffect(() => {
