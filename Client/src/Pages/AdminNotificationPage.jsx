@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { FaBell, FaTrash } from 'react-icons/fa';
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -15,15 +16,9 @@ const AdminNotificationPage = () => {
       const res = await axios.get(`${API}/notifications`, {
         headers: { Authorization: `Bearer ${firebaseToken}` },
       });
-
-      if (Array.isArray(res.data)) {
-        setNotifications(res.data);
-      } else {
-        console.warn('Expected an array but got:', res.data);
-        setNotifications([]);
-      }
+      setNotifications(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.error('Failed to fetch notifications:', err);
+      console.error('Fetch error:', err);
       setNotifications([]);
     }
   };
@@ -37,7 +32,7 @@ const AdminNotificationPage = () => {
       setMessage('');
       fetchNotifications();
     } catch (err) {
-      console.error('Failed to create notification:', err);
+      console.error('Create error:', err);
     }
   };
 
@@ -48,7 +43,7 @@ const AdminNotificationPage = () => {
       });
       fetchNotifications();
     } catch (err) {
-      console.error('Failed to delete notification:', err);
+      console.error('Delete error:', err);
     }
   };
 
@@ -59,45 +54,59 @@ const AdminNotificationPage = () => {
   }, [firebaseToken]);
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-3">🛠 Admin Notifications</h2>
+    <div className="container py-5" style={{ background: '#f8f9fa', minHeight: '100vh' }}>
+      <h2 className="mb-4 text-center text-dark fw-bold">📢 Admin Notifications</h2>
 
-      <div className="mb-4">
+      <div
+        className="p-4 mb-5 rounded shadow-sm bg-white border"
+        style={{ maxWidth: '600px', margin: '0 auto' }}
+      >
         <input
           type="text"
-          className="form-control mb-2"
+          className="form-control mb-3"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          placeholder="Title"
+          placeholder="Notification Title"
         />
         <textarea
-          className="form-control mb-2"
+          className="form-control mb-3"
           value={message}
           onChange={e => setMessage(e.target.value)}
-          placeholder="Message"
+          placeholder="Notification Message"
         />
-        <button className="btn btn-primary" onClick={handleCreate}>
+        <button className="btn btn-primary w-100" onClick={handleCreate}>
           ➕ Create Notification
         </button>
       </div>
 
-      <ul className="list-group">
-        {Array.isArray(notifications) && notifications.length > 0 ? (
+      <div className="row g-4">
+        {notifications.length > 0 ? (
           notifications.map((n) => (
-            <li key={n._id} className="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <strong>{n.title}</strong><br />
-                <small>{n.message}</small>
+            <div key={n._id} className="col-md-6 col-lg-4">
+              <div className="card shadow-sm h-100">
+                <div className="card-body">
+                  <div className="d-flex align-items-center mb-2">
+                    <FaBell className="text-primary me-2" />
+                    <h5 className="card-title mb-0">{n.title}</h5>
+                  </div>
+                  <p className="card-text small text-muted">{n.message}</p>
+                </div>
+                <div className="card-footer bg-transparent border-top-0 d-flex justify-content-end">
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => handleDelete(n._id)}
+                  >
+                    <FaTrash className="me-1" />
+                    Delete
+                  </button>
+                </div>
               </div>
-              <button className="btn btn-sm btn-danger" onClick={() => handleDelete(n._id)}>
-                ❌ Delete
-              </button>
-            </li>
+            </div>
           ))
         ) : (
-          <li className="list-group-item text-muted">No notifications found.</li>
+          <div className="text-center text-muted">No notifications found.</div>
         )}
-      </ul>
+      </div>
     </div>
   );
 };

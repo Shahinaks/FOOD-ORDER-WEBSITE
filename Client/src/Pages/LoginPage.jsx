@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   sendPasswordResetEmail,
+  EmailAuthProvider,
+  linkWithCredential,
 } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -34,27 +36,65 @@ const LoginPage = () => {
     setError('');
     setMessage('');
     setLoading(true);
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, form.email, form.password);
       const user = userCredential.user;
+
       const token = await user.getIdToken();
       localStorage.setItem('firebase_token', token);
 
-      const res = await fetch(`${API}/api/users/check`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await fetch(`${API}/users/check`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!res.ok) throw new Error('Failed to fetch user role');
       const data = await res.json();
 
-      if (data.user.role === 'admin') {
-        navigate('/admin/overview');
-      } else {
-        navigate('/menu');
-      }
+      navigate(data.user.role === 'admin' ? '/admin/overview' : '/menu');
     } catch (err) {
-      console.error(err);
-      setError('Invalid email or password');
+      console.error('Firebase login error:', err.code, err.message);
+
+      // Handle Google-linked email trying to log in with password
+      if (
+        err.code === 'auth/user-not-found' ||
+        err.code === 'auth/invalid-credential' ||
+        err.code === 'auth/wrong-password'
+      ) {
+        try {
+          const googleResult = await signInWithPopup(auth, googleProvider);
+          const googleUser = googleResult.user;
+
+          // Try linking email/password to Google account
+          const emailCredential = EmailAuthProvider.credential(form.email, form.password);
+          await linkWithCredential(googleUser, emailCredential);
+
+          const token = await googleUser.getIdToken();
+          localStorage.setItem('firebase_token', token);
+
+          const res = await fetch(`${API}/users/check`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!res.ok) throw new Error('Failed to fetch user role');
+          const data = await res.json();
+
+          navigate(data.user.role === 'admin' ? '/admin/overview' : '/menu');
+          return;
+        } catch (linkErr) {
+          console.error('Linking failed:', linkErr.message);
+          setError('Invalid credentials or failed to link account');
+          return;
+        }
+      }
+
+      if (err.code === 'auth/invalid-email') {
+        setError('Invalid email format');
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }
@@ -67,20 +107,16 @@ const LoginPage = () => {
       const token = await user.getIdToken();
       localStorage.setItem('firebase_token', token);
 
-      const res = await fetch(`${API}/api/users/check`, {
+      const res = await fetch(`${API}/users/check`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error('Failed to fetch user role');
       const data = await res.json();
 
-      if (data.user.role === 'admin') {
-        navigate('/admin/overview');
-      } else {
-        navigate('/menu');
-      }
+      navigate(data.user.role === 'admin' ? '/admin/overview' : '/menu');
     } catch (err) {
-      console.error(err);
+      console.error('Google login error:', err);
       setError('Google login failed');
     }
   };
@@ -121,11 +157,7 @@ const LoginPage = () => {
           {message && <Alert variant="success">{message}</Alert>}
 
           <div style={styles.socialRow}>
-            <Button
-              onClick={handleGoogleLogin}
-              style={styles.googleBtn}
-              className="w-100"
-            >
+            <Button onClick={handleGoogleLogin} style={styles.googleBtn} className="w-100">
               <img
                 src="https://developers.google.com/identity/images/g-logo.png"
                 alt="Google"
@@ -189,7 +221,6 @@ const LoginPage = () => {
   );
 };
 
-// 🎨 Styles
 const styles = {
   container: {
     backgroundColor: '#fceee3',

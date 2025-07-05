@@ -43,7 +43,7 @@ const SignupPage = () => {
         return;
       }
       await createUserWithEmailAndPassword(auth, form.email, form.password);
-      navigate('/');
+      navigate('/menu');
     } catch (err) {
       alert(err.message);
     }
@@ -52,7 +52,7 @@ const SignupPage = () => {
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
-      navigate('/');
+      navigate('/menu');
     } catch (err) {
       alert(err.message);
     }
@@ -231,7 +231,7 @@ const styles = {
   },
   input: {
     backgroundColor: 'transparent',
-    color: '#fceee3',
+    color: '#000',
     border: 'none',
     borderBottom: '1px dashed #fceee3',
     borderRadius: 0,
